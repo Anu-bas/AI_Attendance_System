@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Students{% endblock %}
+{% block page_title %}Student Management{% endblock %}
+
+{% block content %}
+
+<div class="panel glass">
+  <div class="panel-header-row">
+    <form method="GET" action="{{ url_for('students_list') }}" class="search-form">
+      <input type="text" name="q" placeholder="Search by name, register no, department..." value="{{ search }}">
+      <button type="submit" class="btn btn-secondary">Search</button>
+    </form>
+    <a href="{{ url_for('add_student') }}" class="btn btn-primary">＋ Add Student</a>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Photo</th><th>Reg. No</th><th>Name</th><th>Department</th>
+          <th>Year</th><th>Section</th><th>Email</th><th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in students %}
+        <tr>
+          <td>
+            {% if s.photo_path %}
+            <img class="student-thumb" src="{{ url_for('uploaded_student_photo', filename=s.photo_path) }}" alt="{{ s.name }}">
+            {% else %}
+            <div class="student-thumb placeholder">?</div>
+            {% endif %}
+          </td>
+          <td>{{ s.register_number }}</td>
+          <td>{{ s.name }}</td>
+          <td>{{ s.department }}</td>
+          <td>{{ s.year }}</td>
+          <td>{{ s.section or '-' }}</td>
+          <td>{{ s.email or '-' }}</td>
+          <td class="actions-cell">
+            <a href="{{ url_for('edit_student', student_id=s.id) }}" class="icon-btn" title="Edit">✎</a>
+            <form method="POST" action="{{ url_for('delete_student', student_id=s.id) }}"
+                  onsubmit="return confirm('Remove this student? This cannot be undone easily.');" style="display:inline;">
+              <button type="submit" class="icon-btn danger" title="Delete">🗑</button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="empty-row">No students found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

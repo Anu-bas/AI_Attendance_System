@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Dashboard{% endblock %} | AI Attendance System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  {% block extra_head %}{% endblock %}
+</head>
+
+<body>
+
+  <div class="app-shell">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <span class="brand-icon">◈</span>
+        <span class="brand-text">FaceAttend<span class="brand-accent">AI</span></span>
+      </div>
+
+      <nav class="sidebar-nav">
+        <a href="{{ url_for('dashboard') }}" class="nav-item {{ 'active' if request.endpoint=='dashboard' }}">
+          <span class="nav-icon">▦</span> Dashboard
+        </a>
+        <a href="{{ url_for('students_list') }}"
+          class="nav-item {{ 'active' if request.endpoint in ['students_list','add_student','edit_student'] }}">
+          <span class="nav-icon">☺</span> Students
+        </a>
+        <a href="{{ url_for('classroom_upload') }}"
+          class="nav-item {{ 'active' if request.endpoint in ['classroom_upload'] }}">
+          <span class="nav-icon">▣</span> Classroom Scan
+        </a>
+        <a href="{{ url_for('attendance_list') }}"
+          class="nav-item {{ 'active' if request.endpoint=='attendance_list' }}">
+          <span class="nav-icon">✓</span> Attendance
+        </a>
+
+        <a href="{{ url_for('reports_page') }}" class="nav-item {{ 'active' if request.endpoint=='reports_page' }}">
+          <span class="nav-icon">⬇</span> Reports
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <a href="{{ url_for('logout') }}" class="nav-item logout">
+          <span class="nav-icon">⏻</span> Logout
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <div class="main-area">
+      <header class="topbar">
+        <button class="hamburger" id="hamburgerBtn" aria-label="Toggle sidebar">☰</button>
+        <h1 class="page-title">{% block page_title %}Dashboard{% endblock %}</h1>
+        <div class="topbar-right">
+          <span class="admin-chip">👤 {{ admin_name or 'Admin' }}</span>
+        </div>
+      </header>
+
+      <main class="content">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="flash-stack">
+          {% for category, message in messages %}
+          <div class="flash flash-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+      </main>
+
+      <footer class="app-footer">
+        &copy; {{ current_year }} AI Face Detection Attendance System
+      </footer>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+
+</html>

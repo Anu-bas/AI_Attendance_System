@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Classroom Scan{% endblock %}
+{% block page_title %}Classroom / Lab Photo Scan{% endblock %}
+
+{% block content %}
+<div class="panel glass form-panel">
+  <h2 class="panel-title">Upload Classroom or Lab Photo</h2>
+  <p class="panel-sub">Every face detected in the photo will be compared against registered student faces. Matched students are marked Present; everyone else is marked Absent.</p>
+
+  <form method="POST" enctype="multipart/form-data" class="grid-form">
+    <div class="form-group">
+      <label>Subject *</label>
+      <input type="text" name="subject" placeholder="e.g. Data Structures" required>
+    </div>
+    <div class="form-group">
+      <label>Faculty Name</label>
+      <input type="text" name="faculty_name" placeholder="e.g. Dr. R. Kumar">
+    </div>
+    <div class="form-group">
+      <label>Date *</label>
+      <input type="date" name="attendance_date" value="{{ today }}" required>
+    </div>
+    <div class="form-group full-width">
+      <label>Classroom / Lab Photo *</label>
+      <input type="file" name="classroom_photo" accept="image/png, image/jpeg" required id="classPhotoInput">
+      <img id="classPhotoPreview" class="photo-preview wide" style="display:none;">
+    </div>
+
+    <div class="form-actions full-width">
+      <button type="submit" class="btn btn-primary">Detect &amp; Mark Attendance</button>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+document.getElementById('classPhotoInput').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  const preview = document.getElementById('classPhotoPreview');
+  if (file) {
+    preview.src = URL.createObjectURL(file);
+    preview.style.display = 'block';
+  }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Scan Result{% endblock %}
+{% block page_title %}Classroom Scan Result{% endblock %}
+
+{% block content %}
+
+<div class="panel glass">
+  <h2 class="panel-title">Detection Summary — {{ subject }} ({{ attendance_date }})</h2>
+  <div class="stats-grid" style="margin-bottom:20px;">
+    <div class="stat-card glass stat-blue">
+      <div class="stat-value">{{ result.total_faces }}</div>
+      <div class="stat-label">Faces Detected</div>
+    </div>
+    <div class="stat-card glass stat-green">
+      <div class="stat-value">{{ result.matches|length }}</div>
+      <div class="stat-label">Matched (Present)</div>
+    </div>
+    <div class="stat-card glass stat-red">
+      <div class="stat-value">{{ result.unmatched_boxes|length }}</div>
+      <div class="stat-label">Unrecognized Faces</div>
+    </div>
+  </div>
+
+  <img class="annotated-image" src="{{ url_for('uploaded_classroom_photo', filename=annotated_image) }}" alt="Annotated classroom photo">
+
+  <h3 class="panel-title" style="margin-top:24px;">Matched Students</h3>
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead><tr><th>Name</th><th>Confidence</th><th>Status</th></tr></thead>
+      <tbody>
+        {% for m in result.matches %}
+        <tr>
+          <td>{{ m.name }}</td>
+          <td>{{ m.confidence }}%</td>
+          <td><span class="badge badge-present">Present</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="3" class="empty-row">No students matched in this photo.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="form-actions" style="margin-top:20px;">
+    <a href="{{ url_for('attendance_list', date=attendance_date) }}" class="btn btn-primary">View Full Attendance</a>
+    <a href="{{ url_for('classroom_upload') }}" class="btn btn-ghost">Scan Another Photo</a>
+  </div>
+</div>
+
+{% endblock %}

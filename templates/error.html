@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Error {{ code }}</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-body">
+<div class="auth-wrap">
+  <div class="auth-card glass" style="text-align:center;">
+    <h1 style="font-size:64px;color:#6C5CE7;margin:0;">{{ code }}</h1>
+    <p style="font-size:18px;margin:12px 0 24px;">{{ message }}</p>
+    <a href="{{ url_for('index') }}" class="btn btn-primary">Go Home</a>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="stats-grid">
+  <div class="stat-card glass stat-blue">
+    <div class="stat-icon">☺</div>
+    <div class="stat-value">{{ summary.total_students }}</div>
+    <div class="stat-label">Total Students</div>
+  </div>
+  <div class="stat-card glass stat-green">
+    <div class="stat-icon">✓</div>
+    <div class="stat-value">{{ summary.present_today }}</div>
+    <div class="stat-label">Present Today</div>
+  </div>
+  <div class="stat-card glass stat-red">
+    <div class="stat-icon">✕</div>
+    <div class="stat-value">{{ summary.absent_today }}</div>
+    <div class="stat-label">Absent Today</div>
+  </div>
+  <div class="stat-card glass stat-violet">
+    <div class="stat-icon">%</div>
+    <div class="stat-value">{{ summary.attendance_percentage }}%</div>
+    <div class="stat-label">Today's Attendance</div>
+  </div>
+</div>
+
+<div class="grid-2col">
+  <div class="panel glass">
+    <h2 class="panel-title">Quick Actions</h2>
+    <div class="quick-actions">
+      <a href="{{ url_for('classroom_upload') }}" class="quick-action-btn">
+        <span>▣</span> Scan Classroom Photo
+      </a>
+      <a href="{{ url_for('add_student') }}" class="quick-action-btn">
+        <span>＋</span> Add New Student
+      </a>
+      <a href="{{ url_for('reports_page') }}" class="quick-action-btn">
+        <span>⬇</span> Generate Report
+      </a>
+      <a href="{{ url_for('analytics') }}" class="quick-action-btn">
+        <span>📈</span> View Analytics
+      </a>
+    </div>
+  </div>
+
+  <div class="panel glass">
+    <h2 class="panel-title">Recent Attendance</h2>
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr><th>Student</th><th>Subject</th><th>Date</th><th>Time</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+          {% for r in recent %}
+          <tr>
+            <td>{{ r.name }} <span class="muted">({{ r.register_number }})</span></td>
+            <td>{{ r.subject }}</td>
+            <td>{{ r.attendance_date }}</td>
+            <td>{{ r.attendance_time }}</td>
+            <td><span class="badge badge-{{ 'present' if r.status=='Present' else 'absent' }}">{{ r.status }}</span></td>
+          </tr>
+          {% else %}
+          <tr><td colspan="5" class="empty-row">No attendance records yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

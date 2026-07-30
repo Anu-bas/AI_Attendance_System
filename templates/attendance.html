@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Attendance{% endblock %}
+{% block page_title %}Attendance Records{% endblock %}
+
+{% block content %}
+
+<div class="panel glass">
+  <div class="panel-header-row">
+    <form method="GET" action="{{ url_for('attendance_list') }}" class="search-form">
+      <input type="date" name="date" value="{{ filter_date }}" onchange="this.form.submit()">
+    </form>
+    <button class="btn btn-primary" onclick="document.getElementById('manualModal').classList.add('open')">＋ Manual Entry</button>
+  </div>
+
+  <div class="table-wrap">
+    <table class="data-table">
+      <thead>
+        <tr><th>Reg. No</th><th>Name</th><th>Department</th><th>Subject</th><th>Faculty</th><th>Time</th><th>Status</th><th>Marked By</th></tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr>
+          <td>{{ r.register_number }}</td>
+          <td>{{ r.name }}</td>
+          <td>{{ r.department }}</td>
+          <td>{{ r.subject }}</td>
+          <td>{{ r.faculty_name or '-' }}</td>
+          <td>{{ r.attendance_time }}</td>
+          <td><span class="badge badge-{{ 'present' if r.status=='Present' else 'absent' }}">{{ r.status }}</span></td>
+          <td>{{ r.marked_by }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="empty-row">No attendance records for this date.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Manual attendance modal -->
+<div class="modal-overlay" id="manualModal">
+  <div class="modal glass">
+    <h3 class="panel-title">Manual Attendance Entry</h3>
+    <form method="POST" action="{{ url_for('manual_attendance') }}" class="grid-form">
+      <div class="form-group full-width">
+        <label>Student *</label>
+        <select name="student_id" required>
+          {% for s in students %}
+          <option value="{{ s.id }}">{{ s.name }} ({{ s.register_number }})</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Status *</label>
+        <select name="status" required>
+          <option value="Present">Present</option>
+          <option value="Absent">Absent</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Date *</label>
+        <input type="date" name="attendance_date" value="{{ filter_date }}" required>
+      </div>
+      <div class="form-group">
+        <label>Subject</label>
+        <input type="text" name="subject" value="General">
+      </div>
+      <div class="form-group">
+        <label>Faculty Name</label>
+        <input type="text" name="faculty_name">
+      </div>
+      <div class="form-actions full-width">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button type="button" class="btn btn-ghost" onclick="document.getElementById('manualModal').classList.remove('open')">Cancel</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Edit Student{% endblock %}
+{% block page_title %}Edit Student{% endblock %}
+
+{% block content %}
+<div class="panel glass form-panel">
+  <h2 class="panel-title">Edit Student Details</h2>
+
+  {% if student.photo_path %}
+  <img class="photo-preview" src="{{ url_for('uploaded_student_photo', filename=student.photo_path) }}">
+  {% endif %}
+
+  <form method="POST" enctype="multipart/form-data" class="grid-form">
+    <div class="form-group">
+      <label>Register Number *</label>
+      <input type="text" name="register_number" value="{{ student.register_number }}" required>
+    </div>
+    <div class="form-group">
+      <label>Full Name *</label>
+      <input type="text" name="name" value="{{ student.name }}" required>
+    </div>
+    <div class="form-group">
+      <label>Department *</label>
+      <input type="text" name="department" value="{{ student.department }}" required>
+    </div>
+    <div class="form-group">
+      <label>Year *</label>
+      <select name="year" required>
+        {% for y in ['1st Year','2nd Year','3rd Year','4th Year'] %}
+        <option {{ 'selected' if student.year == y }}>{{ y }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="form-group">
+      <label>Section</label>
+      <input type="text" name="section" value="{{ student.section or '' }}">
+    </div>
+    <div class="form-group">
+      <label>Email</label>
+      <input type="email" name="email" value="{{ student.email or '' }}">
+    </div>
+    <div class="form-group">
+      <label>Phone Number</label>
+      <input type="tel" name="phone" value="{{ student.phone or '' }}">
+    </div>
+    <div class="form-group full-width">
+      <label>Replace Photo (optional — re-registers face)</label>
+      <input type="file" name="photo" accept="image/png, image/jpeg">
+    </div>
+
+    <div class="form-actions full-width">
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+      <a href="{{ url_for('students_list') }}" class="btn btn-ghost">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
