@@ -1,6 +1,16 @@
+# Python virtual environment
 venv/
+
+# Environment variables (passwords/secrets)
 .env
+
+# Python cache files
 __pycache__/
+*.pyc
+
+# Generated files
 uploads/
 reports/
-*.pyc
+
+# Aiven SSL certificate (keep private)
+ca.pem
