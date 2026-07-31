@@ -10,11 +10,11 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
 
     # ---- MySQL (Aiven) ----
-    MYSQL_HOST = "mysql-2e59f8d0-anushree24anu-c996.i.aivencloud.com"
-    MYSQL_PORT = 21652
-    MYSQL_USER = "avnadmin"
-    MYSQL_PASSWORD = "REMOVED"
-    MYSQL_DB = "attendance_system"
+    MYSQL_HOST = os.getenv("MYSQL_HOST")
+    MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
+    MYSQL_USER = os.getenv("MYSQL_USER")
+    MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD")
+    MYSQL_DB = os.getenv("MYSQL_DB")
 
     # ---- Default admin (created automatically if admins table is empty) ----
     DEFAULT_ADMIN_USERNAME = os.getenv("DEFAULT_ADMIN_USERNAME", "admin")
